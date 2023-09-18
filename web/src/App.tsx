@@ -1,7 +1,9 @@
+import { Header } from './layout/header'
+
 export const App = () => {
   return (
-    <>
-      <h1>upload.ai</h1>
-    </>
+    <div className="min-h-screen">
+      <Header />
+    </div>
   )
 }
