@@ -1,11 +1,10 @@
 import { fastify } from 'fastify'
+import { getAllPromptsRoute } from './routes/get-all-prompts'
 
 const PORT = 3333
 const app = fastify()
 
-app.get('/', () => {
-  return 'Hello World'
-})
+app.register(getAllPromptsRoute)
 
 app
   .listen({ port: PORT })
@@ -14,7 +13,7 @@ app
   })
   .catch((error) => {
     console.error({
-      message: 'Something wen wrong!',
+      message: 'Something went wrong!',
       error,
     })
   })
