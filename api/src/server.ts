@@ -1,7 +1,9 @@
+import './dotenvConfig'
 import { fastify } from 'fastify'
 import { fastifyMultipart } from '@fastify/multipart'
 import { getAllPromptsRoute } from './routes/get-all-prompts'
 import { uploadVideoRoute } from './routes/upload-video'
+import { createTranscriptionRoute } from './routes/create-transcription'
 
 const PORT = 3333
 const MEGABYTE = 1_048_576
@@ -15,6 +17,7 @@ app.register(fastifyMultipart, {
 
 app.register(getAllPromptsRoute)
 app.register(uploadVideoRoute)
+app.register(createTranscriptionRoute)
 
 app
   .listen({ port: PORT })
