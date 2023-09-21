@@ -1,9 +1,8 @@
-import { FileVideoIcon, UploadIcon, Wand2Icon } from 'lucide-react'
+import { Wand2Icon } from 'lucide-react'
 import { PromptField } from './components/prompt-field'
 import { Header } from './layout/header'
 import { Separator } from './components/ui/separator'
 import { Label } from './components/ui/label'
-import { Textarea } from './components/ui/textarea'
 import { Button } from './components/ui/button'
 import {
   Select,
@@ -14,6 +13,7 @@ import {
 } from './components/ui/select'
 import { Slider } from './components/ui/slider'
 import { HelperText } from './components/helper-text'
+import { UploadForm } from './components/upload-form'
 
 export const App = () => {
   return (
@@ -24,49 +24,7 @@ export const App = () => {
 
       <main className="flex grow p-2 gap-8">
         <div className="w-80 space-y-4">
-          <form className="space-y-4">
-            <div>
-              <input
-                type="file"
-                id="uploadVideoField"
-                className="peer sr-only"
-                accept="video/mp4"
-              />
-
-              <label
-                htmlFor="uploadVideoField"
-                className="flex flex-col items-center justify-center aspect-video font-bold cursor-pointer border border-dashed transition-colors peer-focus:border-accent-foreground hover:border-accent-foreground peer-focus:bg-primary/5 hover:bg-primary/5"
-              >
-                <FileVideoIcon className="block w-8 h-8" aria-hidden={true} />
-                <span className="block">Selecione um vídeo</span>
-              </label>
-            </div>
-
-            <Separator />
-
-            <div>
-              <Label htmlFor="transcriptionPromptField" className="block pb-2">
-                Prompt de transcrição
-              </Label>
-
-              <Textarea
-                id="transcriptionPromptField"
-                className="block"
-                aria-describedby="transcriptionPromptHelperText"
-                placeholder="Exemplo: eslint, html, react"
-              />
-
-              <HelperText id="transcriptionPromptHelperText" className="mt-1">
-                Inclua palavras-chave mencionadas no vídeo separadas por vírgula
-                (,).
-              </HelperText>
-            </div>
-
-            <Button type="submit" className="w-full gap-2">
-              <UploadIcon className="block w-4 h-4 shrink-0" />
-              <span className="block shrink-0">Carregar o vídeo</span>
-            </Button>
-          </form>
+          <UploadForm />
 
           <Separator />
 
