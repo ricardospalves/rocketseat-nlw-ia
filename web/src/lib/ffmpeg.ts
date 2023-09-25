@@ -13,7 +13,7 @@ export const getFFmpeg = async () => {
   ffmpeg = new FFmpeg()
 
   if (!ffmpeg.loaded) {
-    ffmpeg.load({
+    await ffmpeg.load({
       coreURL,
       wasmURL,
       workerURL,
