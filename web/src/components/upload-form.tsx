@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useMemo, useRef, useState } from 'react'
 import { FileVideoIcon, UploadIcon } from 'lucide-react'
+import { clsx } from 'clsx'
 import { fetchFile } from '@ffmpeg/util'
 import { getFFmpeg } from '@/lib/ffmpeg'
 import { Label } from './ui/label'
@@ -9,9 +10,23 @@ import { HelperText } from './helper-text'
 import { Button } from './ui/button'
 import { api } from '@/lib/axios'
 
-export const UploadForm = () => {
+type Status = 'idle' | 'converting' | 'uploading' | 'generating' | 'success'
+
+const statusMessages = {
+  converting: 'Convertendo…',
+  generating: 'Transcrevendo…',
+  uploading: 'Carregando…',
+  success: 'Vídeo carregado',
+}
+
+export type UploadFormProps = {
+  onVideoUploaded?: (id: string) => void
+}
+
+export const UploadForm = ({ onVideoUploaded }: UploadFormProps) => {
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const promptFieldElement = useRef<HTMLTextAreaElement>(null)
+  const [status, setStatus] = useState<Status>('idle')
 
   const handleFileSelected = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.currentTarget
@@ -63,27 +78,41 @@ export const UploadForm = () => {
       return
     }
 
-    const prompt = promptFieldElement.current?.value
-    const audioFile = await convertVideoToAudio(videoFile)
-    const formData = new FormData()
+    try {
+      setStatus('converting')
 
-    formData.append('file', audioFile)
+      const prompt = promptFieldElement.current?.value
+      const audioFile = await convertVideoToAudio(videoFile)
+      const formData = new FormData()
 
-    const response = await api.post<{
-      message: string
-      data: {
-        createdAt: string
-        id: string
-        name: string
-        path: string
-        transcription: string | null
-      }
-    }>('/video', formData)
-    const videoId = response.data.data.id
+      formData.append('file', audioFile)
 
-    await api.post(`/video/${videoId}/transcription`, {
-      prompt,
-    })
+      setStatus('uploading')
+
+      const response = await api.post<{
+        message: string
+        data: {
+          createdAt: string
+          id: string
+          name: string
+          path: string
+          transcription: string | null
+        }
+      }>('/video', formData)
+      const videoId = response.data.data.id
+
+      setStatus('generating')
+
+      await api.post(`/video/${videoId}/transcription`, {
+        prompt,
+      })
+
+      setStatus('success')
+
+      onVideoUploaded?.(videoId)
+    } catch {
+      setStatus('idle')
+    }
   }
 
   const previewURL = useMemo(() => {
@@ -144,9 +173,22 @@ export const UploadForm = () => {
         </HelperText>
       </div>
 
-      <Button type="submit" className="w-full gap-2">
-        <UploadIcon className="block w-4 h-4 shrink-0" />
-        <span className="block shrink-0">Carregar o vídeo</span>
+      <Button
+        type="submit"
+        className={clsx([
+          'w-full gap-2',
+          status === 'success' && 'bg-emerald-500',
+        ])}
+        disabled={status !== 'idle'}
+      >
+        {status === 'idle' ? (
+          <>
+            <UploadIcon className="block w-4 h-4 shrink-0" />{' '}
+            <span className="block shrink-0">Carregar vídeo</span>
+          </>
+        ) : (
+          statusMessages[status]
+        )}
       </Button>
     </form>
   )

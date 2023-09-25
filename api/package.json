@@ -8,6 +8,9 @@
     "lint": "eslint src --ext .ts",
     "lint:fix": "npm run lint -- --fix"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "keywords": [],
   "author": "Ricardo Alves <ricardospalves@gmail.com>",
   "license": "MIT",
@@ -27,6 +30,7 @@
     "@fastify/cors": "^8.4.0",
     "@fastify/multipart": "^7.7.3",
     "@prisma/client": "^5.3.1",
+    "ai": "^2.2.13",
     "dotenv": "^16.3.1",
     "fastify": "^4.23.2",
     "openai": "^4.8.0",
