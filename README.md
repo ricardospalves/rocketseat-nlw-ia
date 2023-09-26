@@ -2,6 +2,10 @@
 
 Projeto criado durante a [**NLW IA**](https://github.com/rocketseat-education/nlw-ai-mastery) da [@rocketseat](https://github.com/rocketseat).
 
+## 🎥 Preview
+
+https://github.com/ricardospalves/rocketseat-nlw-ia-mastery/assets/7684963/edf52cea-2999-45a0-94f8-ddd7fa3e7671
+
 ## 💻 Sobre o projeto
 
 Aplicação que possibilita realizar upload de vídeos e por meio de **Inteligência Artificial** criar automaticamente títulos chamativos e descrições com um boa indexação.
