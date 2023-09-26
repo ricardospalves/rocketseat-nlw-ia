@@ -9,6 +9,7 @@ import { Textarea } from './ui/textarea'
 import { HelperText } from './helper-text'
 import { Button } from './ui/button'
 import { api } from '@/lib/axios'
+import { Progress } from './ui/progress'
 
 type Status = 'idle' | 'converting' | 'uploading' | 'generating' | 'success'
 
@@ -27,6 +28,7 @@ export const UploadForm = ({ onVideoUploaded }: UploadFormProps) => {
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const promptFieldElement = useRef<HTMLTextAreaElement>(null)
   const [status, setStatus] = useState<Status>('idle')
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   const handleFileSelected = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.currentTarget
@@ -41,18 +43,14 @@ export const UploadForm = ({ onVideoUploaded }: UploadFormProps) => {
   }
 
   const convertVideoToAudio = async (video: File) => {
-    console.log('Convert started')
-
     const ffmpeg = await getFFmpeg()
 
     await ffmpeg.writeFile('input.mp4', await fetchFile(video))
 
-    // ffmpeg.on('log', (log) => {
-    //   console.log(log)
-    // })
-
     ffmpeg.on('progress', (progress) => {
-      console.log('Convert progress: ', Math.round(progress.progress * 100))
+      const currentProgress = Math.round(progress.progress * 100)
+
+      setUploadProgress(currentProgress)
     })
 
     const ffmpegCommand =
@@ -65,8 +63,6 @@ export const UploadForm = ({ onVideoUploaded }: UploadFormProps) => {
     const audioFile = new File([audioFileBlob], 'audio.mp3', {
       type: 'audio/mpeg',
     })
-
-    console.log('Convert finished')
 
     return audioFile
   }
@@ -172,6 +168,29 @@ export const UploadForm = ({ onVideoUploaded }: UploadFormProps) => {
           Inclua palavras-chave mencionadas no vídeo separadas por vírgula (,).
         </HelperText>
       </div>
+
+      {status === 'converting' && (
+        <div>
+          <p id="progressMessage" className="w-full">
+            Convertendo o vídeo…
+          </p>
+
+          <div className="grid grid-cols-12 items-center gap-2">
+            <Progress
+              className="block grow col-span-10"
+              value={uploadProgress}
+              aria-labelledby="progressMessage"
+              aria-describedby="progressValue"
+            />
+            <span
+              id="progressValue"
+              className="col-span-2 block shrink-0 text-right"
+            >
+              {uploadProgress}%
+            </span>
+          </div>
+        </div>
+      )}
 
       <Button
         type="submit"
