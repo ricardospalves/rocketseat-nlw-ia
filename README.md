@@ -76,3 +76,7 @@ Finalmente, agora é só acessar a URL http://localhost:5173 no seu navegador e 
 ## 📝 Licença
 
 Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](https://github.com/ricardospalves/rocketseat-nlw-ia-mastery/blob/main/LICENSE) para mais detalhes.
+
+## 🙏 Créditos
+
+- [Vídeo do NatGeo Brasil usando no preview](https://www.youtube.com/watch?v=rNY5Wija6m4&ab_channel=NationalGeographicBrasil)
