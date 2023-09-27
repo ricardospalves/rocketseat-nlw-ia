@@ -59,6 +59,13 @@ OPENAI_KEY=<sua_api_key_da_openai>
 
 No exemplo de cima, você deve substituir a `<sua_api_key_da_openai>` pela sua _Api Key_ cadastrada na _OpenAI_. Você pode conferir a sua key na página [Api keys](https://platform.openai.com/account/api-keys). Caso não tenha nenhuma chave cadastrada ou não consegue ver, basta criar uma nova clicando no botão _Create new secret key_ e copiar a _key_ gerada.
 
+Rodar o prisma:
+
+```bash
+npx prisma migrate dev --name db
+npx prisma db seed
+```
+
 Agora basta rodar os projetos, lembrando que ambos os projetos precisam estar rodando, então é preciso rodar os comandos seguintes em abas diferentes do seu terminal.
 
 Rodar a api:
